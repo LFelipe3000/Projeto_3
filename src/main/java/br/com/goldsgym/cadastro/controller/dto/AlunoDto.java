@@ -2,6 +2,7 @@ package br.com.goldsgym.cadastro.controller.dto;
 
 public class AlunoDto {
 
+	private Long id;
 	private String nome;
 	private String cpf;
 	private String telefone;
@@ -23,5 +24,12 @@ public class AlunoDto {
 	}
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
+	}
+	public Long getId() {
+		return id;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
 	}
 }
