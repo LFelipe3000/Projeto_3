@@ -1,12 +1,11 @@
 package br.com.goldsgym.cadastro.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,44 +28,34 @@ public class CadastroController {
 	private AlunoService alunoService;
 	
 	@PostMapping
-	public ResponseEntity<?> cadastrarAluno(@RequestBody @Valid Aluno alunoSalvo) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(alunoService.save(alunoSalvo));
+	@ResponseBody
+	public Aluno cadastrarAluno(@RequestBody @Valid Aluno alunoSalvo) {
+		return alunoService.save(alunoSalvo);
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<Aluno>> getAllAlunos(){
-		return ResponseEntity.ok().body(alunoService.findAll());
+	@ResponseBody
+	public List<Aluno> getAllAlunos(){
+		return alunoService.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Object> getOneAluno(@PathVariable Long id){
-		boolean isAlunoPresent = alunoService.isAlunoPresent(id);
-		if(!isAlunoPresent) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno não encontrado");
-		}
-		return ResponseEntity.status(HttpStatus.OK).body(alunoService.get(id));
+	@ResponseBody
+	public Aluno getOneAluno(@PathVariable Long id){
+	Optional<Aluno> alunoOptional = alunoService.findById(id);
+		return alunoOptional.get();
 	}	
 		
 	@DeleteMapping("/{id}")
 	@ResponseBody
-	public ResponseEntity<Object> deleteAluno(@PathVariable Long id){
-		boolean isAlunoPresent = alunoService.isAlunoPresent(id);
-		if(!isAlunoPresent) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno não cadastrado");
-			//throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aluno não cadastrado");
-		}	
-		alunoService.deleteById(id);		
-		return ResponseEntity.status(HttpStatus.OK).body("Aluno deletado com sucesso");
+	public void deleteAluno(@PathVariable Long id){
+		alunoService.deleteById(id);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> atualizarAluno(@PathVariable Long id, 
-												 @RequestBody @Valid AlunoDto alunoDto ){
-		boolean isAlunoPresent = alunoService.isAlunoPresent(id);
-		if(!isAlunoPresent) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno não cadastrado");
-		}
+	@ResponseBody
+	public Object atualizarAluno(@PathVariable Long id, @RequestBody @Valid AlunoDto alunoDto ){
 		Aluno alunoAtualizado = alunoService.setDtoToObject(id, alunoDto);
-		return ResponseEntity.status(HttpStatus.OK).body(alunoService.save(alunoAtualizado));
+		return alunoService.save(alunoAtualizado);
 	}
 }
