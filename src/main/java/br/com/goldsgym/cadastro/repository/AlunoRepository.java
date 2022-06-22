@@ -17,5 +17,4 @@ public interface AlunoRepository extends JpaRepository<Aluno, Long>{
 		}
 		return true;
 	}
-	
 }

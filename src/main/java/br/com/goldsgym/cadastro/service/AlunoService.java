@@ -1,4 +1,4 @@
-package br.com.goldsgym.cadastro.controller.service;
+package br.com.goldsgym.cadastro.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.com.goldsgym.cadastro.controller.dto.AlunoDto;
 import br.com.goldsgym.cadastro.modelo.Aluno;
+import br.com.goldsgym.cadastro.modelo.dto.AlunoDto;
 import br.com.goldsgym.cadastro.repository.AlunoRepository;
 
 @Service
@@ -28,15 +28,18 @@ public class AlunoService {
 
 //  Método para cadastrar um aluno(POST)
 	@Transactional
-	public Aluno save(Aluno alunoDto) {
+	public AlunoDto save(@Valid AlunoDto alunoDto){
 		Aluno alunoSalvo = new Aluno();
 		BeanUtils.copyProperties(alunoDto, alunoSalvo);
-		return alunoRepository.save(alunoSalvo);
+		
+		alunoSalvo = alunoRepository.save(alunoSalvo);
+		BeanUtils.copyProperties(alunoSalvo, alunoDto);
+		return alunoDto;
 	}
 
 //  Método para listar todos os alunos cadastrados(GET)	
-	public List<Aluno> findAll() {
-		return alunoRepository.findAll();
+	public List<Aluno> findAll(){
+	 return alunoRepository.findAll();
 	}
 
 //	Método para buscar um determinado aluno pelo id(GET(ID))
