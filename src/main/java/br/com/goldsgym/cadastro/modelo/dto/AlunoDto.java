@@ -6,11 +6,14 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Length;
+
 public class AlunoDto {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@NotEmpty @NotNull(message = "Name cannot be empty.")
+	@NotEmpty @NotNull(message = "Name cannot be empty.") 
+	@Length(min = 3, message ="Minimum of 3 characters")@Length(max = 8, message="Cannot exceed 8 characters")
 	private String nome;
 	@NotNull @NotEmpty
 	private String cpf;
