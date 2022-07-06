@@ -1,4 +1,4 @@
-package br.com.goldsgym.cadastro.modelo;
+package br.com.goldsgym.cadastro.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,12 +8,14 @@ import javax.persistence.Id;
 @Entity
 public class Aluno {
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
 	private String cpf;
 	private String telefone;
 	
+
 	public Long getId() {
 		return id;
 	}

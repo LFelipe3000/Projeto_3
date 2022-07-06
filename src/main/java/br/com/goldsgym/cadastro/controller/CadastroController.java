@@ -1,12 +1,10 @@
 package br.com.goldsgym.cadastro.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,11 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.goldsgym.cadastro.controller.dto.AlunoDto;
-import br.com.goldsgym.cadastro.controller.service.AlunoService;
-import br.com.goldsgym.cadastro.modelo.Aluno;
+import br.com.goldsgym.cadastro.model.dto.AlunoDto;
+import br.com.goldsgym.cadastro.service.AlunoService;
 
 @RestController
 @RequestMapping("/alunos")
@@ -28,42 +28,36 @@ public class CadastroController {
 	private AlunoService alunoService;
 	
 	@PostMapping
-	public ResponseEntity<?> cadastrarAluno(@RequestBody @Valid Aluno alunoSalvo) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(alunoService.save(alunoSalvo));
+	@ResponseBody
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public AlunoDto cadastrarAluno(@RequestBody @Valid AlunoDto alunoSalvo) {
+		return alunoService.save(alunoSalvo);	
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<Aluno>> getAllAlunos(){
-		return ResponseEntity.ok().body(alunoService.findAll());
+	@ResponseBody
+	public Page<AlunoDto> findPaginated(@RequestParam (defaultValue = "0") int pageNo, 
+			 						 	@RequestParam (defaultValue = "10") int pageSize) {
+		return alunoService.findPaginated(pageNo, pageSize);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Object> getOneAluno(@PathVariable Long id){
-		boolean isAlunoPresent = alunoService.isAlunoPresent(id);
-		if(!isAlunoPresent) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno não encontrado");
-		}
-		return ResponseEntity.status(HttpStatus.OK).body(alunoService.get(id));
-	}
-	
+	@ResponseBody
+	public AlunoDto getOneAluno(@PathVariable Long id){
+	AlunoDto alunoDto = alunoService.findById2(id);
+		return alunoDto;
+	}	
+		
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Object> deleteAluno(@PathVariable Long id){
-		boolean isAlunoPresent = alunoService.isAlunoPresent(id);
-		if(!isAlunoPresent) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno não cadastrado");
-		}
-		alunoService.deleteById(id);		
-		return ResponseEntity.status(HttpStatus.OK).body("Aluno deletado com sucesso");
+	@ResponseBody
+	public void deleteAluno(@PathVariable Long id){
+		alunoService.deleteById(id);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> atualizarAluno(@PathVariable Long id, 
-												 @RequestBody @Valid AlunoDto alunoDto ){
-		boolean isAlunoPresent = alunoService.isAlunoPresent(id);
-		if(!isAlunoPresent) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno não cadastrado");
-		}
-		Aluno alunoAtualizado = alunoService.setDtoToObject(id, alunoDto);
-		return ResponseEntity.status(HttpStatus.OK).body(alunoService.save(alunoAtualizado));
+	@ResponseBody
+	public AlunoDto atualizarAluno(@PathVariable Long id, @RequestBody @Valid AlunoDto alunoDto){
+		AlunoDto alunoAtualizadoDto = alunoService.atualizarAluno(id, alunoDto);
+		return alunoAtualizadoDto;
 	}
 }
