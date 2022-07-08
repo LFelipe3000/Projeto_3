@@ -52,7 +52,7 @@ public class AlunoService {
 	}
 
 //	Method to look for a specific client by id(GET(ID))
-	public AlunoDto findById2(Long id) {
+	public AlunoDto findById(Long id) {
 		
 		Aluno aluno = this.alunoRepository.findById(id).orElseThrow(()->
 			new ResponseStatusException(HttpStatus.NOT_FOUND, "Aluno não encontrado"));
