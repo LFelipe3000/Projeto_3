@@ -9,7 +9,7 @@ public class AlunoDto {
 
 	private Long id;
 	@NotEmpty @NotNull(message = "Name cannot be empty.") 
-	@Length(min = 3, message ="Minimum of 3 characters")@Length(max = 8, message="Cannot exceed 8 characters")
+	@Length(min = 3, message ="Minimum of 3 characters")@Length(max = 15, message="Cannot exceed 15 characters")
 	private String nome;
 	@NotNull @NotEmpty
 	private String cpf;

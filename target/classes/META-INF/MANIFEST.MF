@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: PC
+Build-Jdk: 16.0.2
+Implementation-Title: cadastro
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: br.com.goldsgym
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-boot
+ -starter-parent/cadastro
+Created-By: Maven Integration for Eclipse
+

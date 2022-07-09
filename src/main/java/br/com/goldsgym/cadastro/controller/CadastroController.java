@@ -44,7 +44,7 @@ public class CadastroController {
 	@GetMapping("/{id}")
 	@ResponseBody
 	public AlunoDto getOneAluno(@PathVariable Long id){
-	AlunoDto alunoDto = alunoService.findById2(id);
+	AlunoDto alunoDto = alunoService.findById(id);
 		return alunoDto;
 	}	
 		
